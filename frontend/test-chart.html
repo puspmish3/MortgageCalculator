@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chart.js Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Chart.js Integration Test</h1>
+    <div style="width: 800px; height: 400px;">
+        <canvas id="testChart"></canvas>
+    </div>
+
+    <script>
+        // Test data similar to what our mortgage comparison would use
+        const ctx = document.getElementById('testChart').getContext('2d');
+        
+        const testData = {
+            labels: ['Option 1', 'Option 2', 'Option 3'],
+            datasets: [{
+                label: 'Monthly Payment',
+                data: [3200, 2800, 3500],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)'
+                ],
+                borderColor: [
+                    'rgb(59, 130, 246)',
+                    'rgb(16, 185, 129)',
+                    'rgb(245, 158, 11)'
+                ],
+                borderWidth: 2,
+                borderRadius: 4
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: testData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Mortgage Monthly Payment Comparison Test'
+                    },
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const chart = new Chart(ctx, config);
+        
+        console.log('Chart.js test successful!', chart);
+    </script>
+</body>
+</html>
