@@ -87,7 +87,7 @@ public class ExcelExportService {
 
     private void createSummarySheet(Workbook workbook, MortgageCalculationDto calculation) {
         Sheet sheet = workbook.createSheet("Summary");
-        
+
         // Create styles
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
@@ -115,7 +115,8 @@ public class ExcelExportService {
         addSummaryRow(sheet, rowNum++, "Loan Amount:", calculation.summary().loanAmount(), currencyStyle);
         addSummaryRow(sheet, rowNum++, "Interest Rate:", calculation.summary().interestRate(), percentStyle);
         addSummaryRow(sheet, rowNum++, "Loan Term:", calculation.summary().loanTermYears() + " years", null);
-        addSummaryRow(sheet, rowNum++, "Payment Frequency:", calculation.summary().paymentFrequency().getDisplayName(), null);
+        addSummaryRow(sheet, rowNum++, "Payment Frequency:", calculation.summary().paymentFrequency().getDisplayName(),
+                null);
 
         // Empty row
         rowNum++;
@@ -133,7 +134,7 @@ public class ExcelExportService {
 
     private void createAmortizationSheet(Workbook workbook, List<AmortizationEntryDto> schedule) {
         Sheet sheet = workbook.createSheet("Amortization Schedule");
-        
+
         // Create styles
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
@@ -143,8 +144,8 @@ public class ExcelExportService {
 
         // Headers
         Row headerRow = sheet.createRow(rowNum++);
-        String[] headers = {"Payment #", "Date", "Principal", "Interest", "Total Payment", "Remaining Balance"};
-        
+        String[] headers = { "Payment #", "Date", "Principal", "Interest", "Total Payment", "Remaining Balance" };
+
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -154,25 +155,25 @@ public class ExcelExportService {
         // Data rows
         for (AmortizationEntryDto entry : schedule) {
             Row row = sheet.createRow(rowNum++);
-            
+
             row.createCell(0).setCellValue(entry.paymentNumber());
-            
+
             Cell dateCell = row.createCell(1);
             dateCell.setCellValue(entry.paymentDate());
             dateCell.setCellStyle(dateStyle);
-            
+
             Cell principalCell = row.createCell(2);
             principalCell.setCellValue(entry.principalPayment().doubleValue());
             principalCell.setCellStyle(currencyStyle);
-            
+
             Cell interestCell = row.createCell(3);
             interestCell.setCellValue(entry.interestPayment().doubleValue());
             interestCell.setCellStyle(currencyStyle);
-            
+
             Cell totalCell = row.createCell(4);
             totalCell.setCellValue(entry.totalPayment().doubleValue());
             totalCell.setCellStyle(currencyStyle);
-            
+
             Cell balanceCell = row.createCell(5);
             balanceCell.setCellValue(entry.remainingBalance().doubleValue());
             balanceCell.setCellStyle(currencyStyle);
@@ -189,7 +190,7 @@ public class ExcelExportService {
 
     private void createComparisonSummarySheet(Workbook workbook, MortgageComparisonDto comparison) {
         Sheet sheet = workbook.createSheet("Comparison Summary");
-        
+
         // Create styles
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
@@ -213,8 +214,10 @@ public class ExcelExportService {
         rowNum++;
 
         // Best options
-        addSummaryRow(sheet, rowNum++, "Best Monthly Payment:", comparison.comparisonSummary().bestMonthlyPayment(), currencyStyle);
-        addSummaryRow(sheet, rowNum++, "Lowest Total Interest:", comparison.comparisonSummary().bestTotalInterest(), currencyStyle);
+        addSummaryRow(sheet, rowNum++, "Best Monthly Payment:", comparison.comparisonSummary().bestMonthlyPayment(),
+                currencyStyle);
+        addSummaryRow(sheet, rowNum++, "Lowest Total Interest:", comparison.comparisonSummary().bestTotalInterest(),
+                currencyStyle);
 
         // Empty row
         rowNum++;
@@ -223,7 +226,7 @@ public class ExcelExportService {
         Row compHeaderRow = sheet.createRow(rowNum++);
         compHeaderRow.createCell(0).setCellValue("Metric");
         compHeaderRow.getCell(0).setCellStyle(headerStyle);
-        
+
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             Cell cell = compHeaderRow.createCell(i + 1);
             cell.setCellValue("Option " + (i + 1));
@@ -266,7 +269,7 @@ public class ExcelExportService {
     private void createMortgageSheet(Workbook workbook, MortgageCalculationDto calculation, String sheetName) {
         // Create a simplified version for comparison sheets
         Sheet sheet = workbook.createSheet(sheetName);
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
 
@@ -295,7 +298,7 @@ public class ExcelExportService {
     private void addSummaryRow(Sheet sheet, int rowNum, String label, Object value, CellStyle valueStyle) {
         Row row = sheet.createRow(rowNum);
         row.createCell(0).setCellValue(label);
-        
+
         Cell valueCell = row.createCell(1);
         if (value instanceof BigDecimal) {
             valueCell.setCellValue(((BigDecimal) value).doubleValue());
@@ -304,7 +307,7 @@ public class ExcelExportService {
         } else {
             valueCell.setCellValue(value.toString());
         }
-        
+
         if (valueStyle != null) {
             valueCell.setCellStyle(valueStyle);
         }
@@ -342,7 +345,7 @@ public class ExcelExportService {
 
     private void createComprehensiveComparisonSummarySheet(Workbook workbook, MortgageComparisonDto comparison) {
         Sheet sheet = workbook.createSheet("Comprehensive Summary");
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
         CellStyle percentStyle = createPercentStyle(workbook);
@@ -353,10 +356,11 @@ public class ExcelExportService {
         Row titleRow = sheet.createRow(rowNum++);
         Cell titleCell = titleRow.createCell(0);
         titleCell.setCellValue("🏡 Comprehensive Mortgage Comparison Report");
-        
+
         CellStyle enhancedTitleStyle = createEnhancedTitleStyle(workbook);
         titleCell.setCellStyle(enhancedTitleStyle);
-        sheet.addMergedRegion(new CellRangeAddress(rowNum-1, rowNum-1, 0, Math.max(5, comparison.mortgages().size())));
+        sheet.addMergedRegion(
+                new CellRangeAddress(rowNum - 1, rowNum - 1, 0, Math.max(5, comparison.mortgages().size())));
 
         rowNum++;
 
@@ -364,12 +368,12 @@ public class ExcelExportService {
         Row execRow = sheet.createRow(rowNum++);
         Cell execCell = execRow.createCell(0);
         execCell.setCellValue("📊 Executive Summary");
-        
+
         CellStyle summaryHeaderStyle = createSummaryHeaderStyle(workbook);
         execCell.setCellStyle(summaryHeaderStyle);
 
         Row summaryDescRow = sheet.createRow(rowNum++);
-        summaryDescRow.createCell(0).setCellValue("Comparing " + comparison.mortgages().size() + 
+        summaryDescRow.createCell(0).setCellValue("Comparing " + comparison.mortgages().size() +
                 " mortgage options with detailed analysis including monthly payments, total costs, and amortization schedules.");
 
         rowNum += 2;
@@ -378,7 +382,7 @@ public class ExcelExportService {
         Row compHeaderRow = sheet.createRow(rowNum++);
         compHeaderRow.createCell(0).setCellValue("Metric");
         compHeaderRow.getCell(0).setCellStyle(headerStyle);
-        
+
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             Cell cell = compHeaderRow.createCell(i + 1);
             cell.setCellValue("Option " + (i + 1));
@@ -386,20 +390,20 @@ public class ExcelExportService {
         }
 
         // Add comprehensive metrics
-        addComparisonMetricRow(sheet, rowNum++, "Loan Amount", comparison.mortgages(), 
-                              m -> m.summary().loanAmount(), currencyStyle);
-        addComparisonMetricRow(sheet, rowNum++, "Interest Rate", comparison.mortgages(), 
-                              m -> m.summary().interestRate(), percentStyle);
-        addComparisonMetricRow(sheet, rowNum++, "Loan Term (Years)", comparison.mortgages(), 
-                              m -> BigDecimal.valueOf(m.summary().loanTermYears()), null);
-        addComparisonMetricRow(sheet, rowNum++, "Monthly Payment", comparison.mortgages(), 
-                              MortgageCalculationDto::monthlyPayment, currencyStyle);
-        addComparisonMetricRow(sheet, rowNum++, "Total Interest", comparison.mortgages(), 
-                              MortgageCalculationDto::totalInterest, currencyStyle);
-        addComparisonMetricRow(sheet, rowNum++, "Total Amount Paid", comparison.mortgages(), 
-                              m -> m.summary().totalAmountPaid(), currencyStyle);
-        addComparisonMetricRow(sheet, rowNum++, "Total Payments", comparison.mortgages(), 
-                              m -> BigDecimal.valueOf(m.totalPayments()), null);
+        addComparisonMetricRow(sheet, rowNum++, "Loan Amount", comparison.mortgages(),
+                m -> m.summary().loanAmount(), currencyStyle);
+        addComparisonMetricRow(sheet, rowNum++, "Interest Rate", comparison.mortgages(),
+                m -> m.summary().interestRate(), percentStyle);
+        addComparisonMetricRow(sheet, rowNum++, "Loan Term (Years)", comparison.mortgages(),
+                m -> BigDecimal.valueOf(m.summary().loanTermYears()), null);
+        addComparisonMetricRow(sheet, rowNum++, "Monthly Payment", comparison.mortgages(),
+                MortgageCalculationDto::monthlyPayment, currencyStyle);
+        addComparisonMetricRow(sheet, rowNum++, "Total Interest", comparison.mortgages(),
+                MortgageCalculationDto::totalInterest, currencyStyle);
+        addComparisonMetricRow(sheet, rowNum++, "Total Amount Paid", comparison.mortgages(),
+                m -> m.summary().totalAmountPaid(), currencyStyle);
+        addComparisonMetricRow(sheet, rowNum++, "Total Payments", comparison.mortgages(),
+                m -> BigDecimal.valueOf(m.totalPayments()), null);
 
         rowNum += 2;
 
@@ -428,7 +432,7 @@ public class ExcelExportService {
 
     private void createVisualComparisonSheet(Workbook workbook, MortgageComparisonDto comparison) {
         Sheet sheet = workbook.createSheet("Visual Comparison Data");
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
 
@@ -460,17 +464,17 @@ public class ExcelExportService {
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             MortgageCalculationDto mortgage = comparison.mortgages().get(i);
             Row dataRow = sheet.createRow(rowNum++);
-            
+
             dataRow.createCell(0).setCellValue("Option " + (i + 1));
-            
+
             Cell principalCell = dataRow.createCell(1);
             principalCell.setCellValue(mortgage.summary().loanAmount().doubleValue());
             principalCell.setCellStyle(currencyStyle);
-            
+
             Cell interestCell = dataRow.createCell(2);
             interestCell.setCellValue(mortgage.totalInterest().doubleValue());
             interestCell.setCellStyle(currencyStyle);
-            
+
             Cell totalCell = dataRow.createCell(3);
             totalCell.setCellValue(mortgage.summary().totalAmountPaid().doubleValue());
             totalCell.setCellStyle(currencyStyle);
@@ -493,7 +497,7 @@ public class ExcelExportService {
                 .map(m -> m.summary().totalAmountPaid())
                 .min(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
-        
+
         BigDecimal highestCost = comparison.mortgages().stream()
                 .map(m -> m.summary().totalAmountPaid())
                 .max(BigDecimal::compareTo)
@@ -518,15 +522,15 @@ public class ExcelExportService {
 
     private void addColorfulChartsToSheet(Sheet sheet, MortgageComparisonDto comparison, int startRow) {
         Workbook workbook = sheet.getWorkbook();
-        
+
         // Create chart data section
         int chartDataRow = startRow;
-        
+
         // Chart Title
         Row titleRow = sheet.createRow(chartDataRow++);
         Cell titleCell = titleRow.createCell(0);
         titleCell.setCellValue("Visual Comparison Charts Data");
-        
+
         CellStyle titleStyle = workbook.createCellStyle();
         Font titleFont = workbook.createFont();
         titleFont.setBold(true);
@@ -536,63 +540,63 @@ public class ExcelExportService {
         titleStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
         titleStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         titleCell.setCellStyle(titleStyle);
-        
+
         chartDataRow++;
-        
+
         // Headers for chart data
         Row headerRow = sheet.createRow(chartDataRow++);
         CellStyle headerStyle = createColoredHeaderStyle(workbook);
-        
-        String[] headers = {"Option", "Monthly Payment", "Total Cost", "Total Interest", "Principal"};
+
+        String[] headers = { "Option", "Monthly Payment", "Total Cost", "Total Interest", "Principal" };
         for (int i = 0; i < headers.length; i++) {
             Cell headerCell = headerRow.createCell(i);
             headerCell.setCellValue(headers[i]);
             headerCell.setCellStyle(headerStyle);
         }
-        
+
         // Data rows with alternating colors
         CellStyle[] dataCellStyles = createAlternatingRowStyles(workbook);
         CellStyle currencyStyle = createColoredCurrencyStyle(workbook);
-        
+
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             MortgageCalculationDto mortgage = comparison.mortgages().get(i);
             Row dataRow = sheet.createRow(chartDataRow++);
-            
+
             // Option name
             Cell optionCell = dataRow.createCell(0);
             optionCell.setCellValue("Option " + (i + 1));
             optionCell.setCellStyle(dataCellStyles[i % 2]);
-            
+
             // Monthly Payment with currency styling
             Cell monthlyPaymentCell = dataRow.createCell(1);
             monthlyPaymentCell.setCellValue(mortgage.monthlyPayment().doubleValue());
             monthlyPaymentCell.setCellStyle(currencyStyle);
-            
+
             // Total Cost
             Cell totalCostCell = dataRow.createCell(2);
             totalCostCell.setCellValue(mortgage.summary().totalAmountPaid().doubleValue());
             totalCostCell.setCellStyle(currencyStyle);
-            
+
             // Total Interest
             Cell totalInterestCell = dataRow.createCell(3);
             totalInterestCell.setCellValue(mortgage.totalInterest().doubleValue());
             totalInterestCell.setCellStyle(currencyStyle);
-            
+
             // Principal
             Cell principalCell = dataRow.createCell(4);
             principalCell.setCellValue(mortgage.summary().loanAmount().doubleValue());
             principalCell.setCellStyle(currencyStyle);
         }
-        
+
         // Create visual data bars in Excel (using conditional formatting effect)
         addVisualDataBars(sheet, chartDataRow - comparison.mortgages().size(), comparison.mortgages().size());
-        
+
         // Auto-size the chart data columns
         for (int i = 0; i < 5; i++) {
             sheet.autoSizeColumn(i);
         }
     }
-    
+
     private CellStyle createColoredHeaderStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         Font font = workbook.createFont();
@@ -610,10 +614,10 @@ public class ExcelExportService {
         style.setBorderLeft(BorderStyle.THIN);
         return style;
     }
-    
+
     private CellStyle[] createAlternatingRowStyles(Workbook workbook) {
         CellStyle[] styles = new CellStyle[2];
-        
+
         // Light gray style
         styles[0] = workbook.createCellStyle();
         styles[0].setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -623,7 +627,7 @@ public class ExcelExportService {
         styles[0].setBorderTop(BorderStyle.THIN);
         styles[0].setBorderRight(BorderStyle.THIN);
         styles[0].setBorderLeft(BorderStyle.THIN);
-        
+
         // White style
         styles[1] = workbook.createCellStyle();
         styles[1].setFillForegroundColor(IndexedColors.WHITE.getIndex());
@@ -633,10 +637,10 @@ public class ExcelExportService {
         styles[1].setBorderTop(BorderStyle.THIN);
         styles[1].setBorderRight(BorderStyle.THIN);
         styles[1].setBorderLeft(BorderStyle.THIN);
-        
+
         return styles;
     }
-    
+
     private CellStyle createColoredCurrencyStyle(Workbook workbook) {
         CellStyle style = workbook.createCellStyle();
         style.setDataFormat(workbook.createDataFormat().getFormat("$#,##0.00"));
@@ -651,21 +655,21 @@ public class ExcelExportService {
         style.setBorderLeft(BorderStyle.THIN);
         return style;
     }
-    
+
     private void addVisualDataBars(Sheet sheet, int startRow, int numRows) {
         // Add colored backgrounds to simulate visual bars
         Workbook workbook = sheet.getWorkbook();
-        
+
         // Colors for different options
         short[] colors = {
-            IndexedColors.LIGHT_BLUE.getIndex(),
-            IndexedColors.LIGHT_GREEN.getIndex(),
-            IndexedColors.LIGHT_ORANGE.getIndex(),
-            IndexedColors.ROSE.getIndex(),
-            IndexedColors.LAVENDER.getIndex(),
-            IndexedColors.PALE_BLUE.getIndex()
+                IndexedColors.LIGHT_BLUE.getIndex(),
+                IndexedColors.LIGHT_GREEN.getIndex(),
+                IndexedColors.LIGHT_ORANGE.getIndex(),
+                IndexedColors.ROSE.getIndex(),
+                IndexedColors.LAVENDER.getIndex(),
+                IndexedColors.PALE_BLUE.getIndex()
         };
-        
+
         for (int i = 0; i < numRows && i < colors.length; i++) {
             Row row = sheet.getRow(startRow + i);
             if (row != null) {
@@ -678,12 +682,12 @@ public class ExcelExportService {
                 barStyle.setBorderTop(BorderStyle.MEDIUM);
                 barStyle.setBorderRight(BorderStyle.MEDIUM);
                 barStyle.setBorderLeft(BorderStyle.MEDIUM);
-                
+
                 Font barFont = workbook.createFont();
                 barFont.setBold(true);
                 barFont.setColor(IndexedColors.BLACK.getIndex());
                 barStyle.setFont(barFont);
-                
+
                 // Apply colorful style to monetary columns (1-4)
                 for (int col = 1; col <= 4; col++) {
                     Cell cell = row.getCell(col);
@@ -697,7 +701,7 @@ public class ExcelExportService {
 
     private void createDetailedMortgageSheet(Workbook workbook, MortgageCalculationDto calculation, String sheetName) {
         Sheet sheet = workbook.createSheet(sheetName);
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
         CellStyle percentStyle = createPercentStyle(workbook);
@@ -715,7 +719,8 @@ public class ExcelExportService {
         addSummaryRow(sheet, rowNum++, "Loan Amount:", calculation.summary().loanAmount(), currencyStyle);
         addSummaryRow(sheet, rowNum++, "Interest Rate:", calculation.summary().interestRate(), percentStyle);
         addSummaryRow(sheet, rowNum++, "Loan Term:", calculation.summary().loanTermYears() + " years", null);
-        addSummaryRow(sheet, rowNum++, "Payment Frequency:", calculation.summary().paymentFrequency().getDisplayName(), null);
+        addSummaryRow(sheet, rowNum++, "Payment Frequency:", calculation.summary().paymentFrequency().getDisplayName(),
+                null);
         addSummaryRow(sheet, rowNum++, "Monthly Payment:", calculation.monthlyPayment(), currencyStyle);
         addSummaryRow(sheet, rowNum++, "Total Interest:", calculation.totalInterest(), currencyStyle);
         addSummaryRow(sheet, rowNum++, "Total Amount Paid:", calculation.summary().totalAmountPaid(), currencyStyle);
@@ -730,9 +735,10 @@ public class ExcelExportService {
         sheet.autoSizeColumn(1);
     }
 
-    private void createCompleteAmortizationSheet(Workbook workbook, List<AmortizationEntryDto> schedule, String sheetName) {
+    private void createCompleteAmortizationSheet(Workbook workbook, List<AmortizationEntryDto> schedule,
+            String sheetName) {
         Sheet sheet = workbook.createSheet(sheetName);
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
         CellStyle dateStyle = createDateStyle(workbook);
@@ -742,8 +748,9 @@ public class ExcelExportService {
 
         // Headers - including interest rate column
         Row headerRow = sheet.createRow(rowNum++);
-        String[] headers = {"Payment #", "Date", "Principal", "Interest", "Total Payment", "Remaining Balance", "Interest Rate"};
-        
+        String[] headers = { "Payment #", "Date", "Principal", "Interest", "Total Payment", "Remaining Balance",
+                "Interest Rate" };
+
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
@@ -753,25 +760,25 @@ public class ExcelExportService {
         // Data rows - all payments
         for (AmortizationEntryDto entry : schedule) {
             Row row = sheet.createRow(rowNum++);
-            
+
             row.createCell(0).setCellValue(entry.paymentNumber());
-            
+
             Cell dateCell = row.createCell(1);
             dateCell.setCellValue(entry.paymentDate());
             dateCell.setCellStyle(dateStyle);
-            
+
             Cell principalCell = row.createCell(2);
             principalCell.setCellValue(entry.principalPayment().doubleValue());
             principalCell.setCellStyle(currencyStyle);
-            
+
             Cell interestCell = row.createCell(3);
             interestCell.setCellValue(entry.interestPayment().doubleValue());
             interestCell.setCellStyle(currencyStyle);
-            
+
             Cell totalCell = row.createCell(4);
             totalCell.setCellValue(entry.totalPayment().doubleValue());
             totalCell.setCellStyle(currencyStyle);
-            
+
             Cell balanceCell = row.createCell(5);
             balanceCell.setCellValue(entry.remainingBalance().doubleValue());
             balanceCell.setCellStyle(currencyStyle);
@@ -792,7 +799,7 @@ public class ExcelExportService {
 
     private void createYearlyComparisonSheet(Workbook workbook, MortgageComparisonDto comparison) {
         Sheet sheet = workbook.createSheet("Yearly Comparison");
-        
+
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle currencyStyle = createCurrencyStyle(workbook);
 
@@ -809,7 +816,7 @@ public class ExcelExportService {
         Row headerRow = sheet.createRow(rowNum++);
         headerRow.createCell(0).setCellValue("Option");
         headerRow.getCell(0).setCellStyle(headerStyle);
-        
+
         for (int year = 1; year <= 10; year++) {
             Cell cell = headerRow.createCell(year);
             cell.setCellValue("Year " + year + " Balance");
@@ -820,9 +827,9 @@ public class ExcelExportService {
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             MortgageCalculationDto mortgage = comparison.mortgages().get(i);
             Row dataRow = sheet.createRow(rowNum++);
-            
+
             dataRow.createCell(0).setCellValue("Option " + (i + 1));
-            
+
             List<AmortizationEntryDto> schedule = mortgage.amortizationSchedule();
             for (int year = 1; year <= 10; year++) {
                 int paymentIndex = year * 12 - 1; // Last payment of the year
@@ -842,8 +849,8 @@ public class ExcelExportService {
         }
     }
 
-    private void createYearlyBreakdown(Sheet sheet, int startRow, List<AmortizationEntryDto> schedule, 
-                                     CellStyle headerStyle, CellStyle currencyStyle) {
+    private void createYearlyBreakdown(Sheet sheet, int startRow, List<AmortizationEntryDto> schedule,
+            CellStyle headerStyle, CellStyle currencyStyle) {
         Row yearHeaderRow = sheet.createRow(startRow++);
         yearHeaderRow.createCell(0).setCellValue("Yearly Breakdown (First 10 Years)");
         yearHeaderRow.getCell(0).setCellStyle(headerStyle);
@@ -877,15 +884,15 @@ public class ExcelExportService {
 
             Row yearRow = sheet.createRow(startRow++);
             yearRow.createCell(0).setCellValue(year);
-            
+
             Cell principalCell = yearRow.createCell(1);
             principalCell.setCellValue(yearlyPrincipal.doubleValue());
             principalCell.setCellStyle(currencyStyle);
-            
+
             Cell interestCell = yearRow.createCell(2);
             interestCell.setCellValue(yearlyInterest.doubleValue());
             interestCell.setCellStyle(currencyStyle);
-            
+
             Cell balanceCell = yearRow.createCell(3);
             balanceCell.setCellValue(endBalance.doubleValue());
             balanceCell.setCellStyle(currencyStyle);
@@ -893,11 +900,11 @@ public class ExcelExportService {
     }
 
     private void addComparisonMetricRow(Sheet sheet, int rowNum, String metric, List<MortgageCalculationDto> mortgages,
-                                      java.util.function.Function<MortgageCalculationDto, BigDecimal> valueExtractor, 
-                                      CellStyle valueStyle) {
+            java.util.function.Function<MortgageCalculationDto, BigDecimal> valueExtractor,
+            CellStyle valueStyle) {
         Row row = sheet.createRow(rowNum);
         row.createCell(0).setCellValue(metric);
-        
+
         for (int i = 0; i < mortgages.size(); i++) {
             Cell cell = row.createCell(i + 1);
             BigDecimal value = valueExtractor.apply(mortgages.get(i));
@@ -911,28 +918,28 @@ public class ExcelExportService {
     private int findBestMonthlyPaymentIndex(List<MortgageCalculationDto> mortgages) {
         BigDecimal bestPayment = mortgages.get(0).monthlyPayment();
         int bestIndex = 0;
-        
+
         for (int i = 1; i < mortgages.size(); i++) {
             if (mortgages.get(i).monthlyPayment().compareTo(bestPayment) < 0) {
                 bestPayment = mortgages.get(i).monthlyPayment();
                 bestIndex = i;
             }
         }
-        
+
         return bestIndex;
     }
 
     private int findBestTotalCostIndex(List<MortgageCalculationDto> mortgages) {
         BigDecimal bestCost = mortgages.get(0).summary().totalAmountPaid();
         int bestIndex = 0;
-        
+
         for (int i = 1; i < mortgages.size(); i++) {
             if (mortgages.get(i).summary().totalAmountPaid().compareTo(bestCost) < 0) {
                 bestCost = mortgages.get(i).summary().totalAmountPaid();
                 bestIndex = i;
             }
         }
-        
+
         return bestIndex;
     }
 

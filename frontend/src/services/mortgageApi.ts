@@ -6,7 +6,21 @@ import type {
   ExportRequest 
 } from '@/types/mortgage'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
+// Runtime configuration for Azure Container Apps
+const getApiBaseUrl = (): string => {
+  // Check if we're in Azure Container Apps environment
+  if (window.location.hostname.includes('azurecontainerapps.io')) {
+    // In Azure, derive backend URL from frontend URL
+    const frontendUrl = window.location.origin
+    const backendUrl = frontendUrl.replace('frontend.', 'backend.')
+    return `${backendUrl}/api`
+  }
+  
+  // For local development, use environment variable or fallback
+  return import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
+}
+
+const API_BASE_URL = getApiBaseUrl()
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -56,7 +70,7 @@ export class MortgageApiService {
    */
   static async exportToPdf(calculationId: string, includeChart: boolean = true): Promise<Blob> {
     const response = await apiClient.post(
-      '/mortgage/export/pdf',
+      '/v1/export/mortgage/pdf',
       { calculationId, format: 'PDF', includeChart } as ExportRequest,
       { responseType: 'blob' }
     )
@@ -68,7 +82,7 @@ export class MortgageApiService {
    */
   static async exportToExcel(calculationId: string): Promise<Blob> {
     const response = await apiClient.post(
-      '/mortgage/export/excel',
+      '/v1/export/mortgage/excel',
       { calculationId, format: 'EXCEL', includeChart: false } as ExportRequest,
       { responseType: 'blob' }
     )

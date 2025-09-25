@@ -1,17 +1,19 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-8">
     <!-- Header -->
-    <div class="text-center mb-8">
-      <h2 class="section-subheader">Mortgage Details</h2>
-      <p class="text-gray-600">Enter your mortgage information to calculate payments</p>
+    <div class="text-center mb-6 sm:mb-8">
+      <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">Mortgage Details</h2>
+      <p class="text-sm sm:text-base text-gray-600 px-2">Enter your mortgage information to calculate payments</p>
     </div>
 
     <!-- Property Value and Down Payment -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
       <div class="form-group">
         <label for="propertyValue" class="form-label">Property Value</label>
         <div class="relative">
-          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">$</span>
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium"
+            >$</span
+          >
           <input
             id="propertyValue"
             v-model.number="form.propertyValue"
@@ -27,7 +29,9 @@
       <div class="form-group">
         <label for="downPayment" class="form-label">Down Payment</label>
         <div class="relative">
-          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">$</span>
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium"
+            >$</span
+          >
           <input
             id="downPayment"
             v-model.number="form.downPayment"
@@ -54,7 +58,7 @@
     </div>
 
     <!-- Interest Rate and Term -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
       <div class="form-group">
         <label for="interestRate" class="form-label">Annual Interest Rate</label>
         <div class="relative">
@@ -69,7 +73,10 @@
             placeholder="6.50"
             required
           />
-          <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">%</span>
+          <span
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium"
+            >%</span
+          >
         </div>
       </div>
 
@@ -86,7 +93,10 @@
             placeholder="30"
             required
           />
-          <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">years</span>
+          <span
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium"
+            >years</span
+          >
         </div>
       </div>
     </div>
@@ -94,29 +104,29 @@
     <!-- Mortgage Type -->
     <div class="form-group">
       <label class="form-label">Mortgage Type</label>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <label 
-          v-for="type in mortgageTypes" 
+      <div class="grid grid-cols-1 gap-3 sm:gap-4">
+        <label
+          v-for="type in mortgageTypes"
           :key="type.value"
-          class="relative flex cursor-pointer rounded-xl border p-5 focus:outline-none transition-all duration-200 hover:shadow-md"
-          :class="form.mortgageType === type.value ? 'border-primary-600 bg-primary-50 shadow-md' : 'border-gray-300 hover:border-gray-400'"
+          class="relative flex cursor-pointer rounded-xl border p-3 sm:p-5 focus:outline-none transition-all duration-200 hover:shadow-md"
+          :class="
+            form.mortgageType === type.value
+              ? 'border-primary-600 bg-primary-50 shadow-md'
+              : 'border-gray-300 hover:border-gray-400'
+          "
         >
-          <input
-            v-model="form.mortgageType"
-            :value="type.value"
-            type="radio"
-            class="sr-only"
-          />
+          <input v-model="form.mortgageType" :value="type.value" type="radio" class="sr-only" />
           <div class="flex-1">
-            <div class="font-medium text-gray-900">{{ type.label }}</div>
-            <div class="text-sm text-gray-500">{{ type.description }}</div>
+            <div class="font-medium text-gray-900 text-sm sm:text-base">{{ type.label }}</div>
+            <div class="text-xs sm:text-sm text-gray-500 mt-1">{{ type.description }}</div>
           </div>
-          <div 
-            v-if="form.mortgageType === type.value"
-            class="flex-shrink-0 text-primary-600"
-          >
+          <div v-if="form.mortgageType === type.value" class="flex-shrink-0 text-primary-600">
             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
             </svg>
           </div>
         </label>
@@ -126,12 +136,7 @@
     <!-- Payment Frequency -->
     <div class="form-group">
       <label for="paymentFrequency" class="form-label">Payment Frequency</label>
-      <select
-        id="paymentFrequency"
-        v-model="form.paymentFrequency"
-        class="form-select"
-        required
-      >
+      <select id="paymentFrequency" v-model="form.paymentFrequency" class="form-select" required>
         <option value="MONTHLY">Monthly (12 payments/year)</option>
         <option value="BI_WEEKLY">Bi-weekly (26 payments/year)</option>
         <option value="WEEKLY">Weekly (52 payments/year)</option>
@@ -144,29 +149,29 @@
     <!-- Buydown Options -->
     <div class="form-group">
       <label class="form-label">Rate Buydown Option</label>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <label 
-          v-for="option in buydownOptions" 
+      <div class="grid grid-cols-1 gap-3 sm:gap-4">
+        <label
+          v-for="option in buydownOptions"
           :key="option.value"
-          class="relative flex cursor-pointer rounded-xl border p-5 focus:outline-none transition-all duration-200 hover:shadow-md"
-          :class="form.buydownType === option.value ? 'border-primary-600 bg-primary-50 shadow-md' : 'border-gray-300 hover:border-gray-400'"
+          class="relative flex cursor-pointer rounded-xl border p-3 sm:p-5 focus:outline-none transition-all duration-200 hover:shadow-md"
+          :class="
+            form.buydownType === option.value
+              ? 'border-primary-600 bg-primary-50 shadow-md'
+              : 'border-gray-300 hover:border-gray-400'
+          "
         >
-          <input
-            v-model="form.buydownType"
-            :value="option.value"
-            type="radio"
-            class="sr-only"
-          />
+          <input v-model="form.buydownType" :value="option.value" type="radio" class="sr-only" />
           <div class="flex-1">
-            <div class="font-medium text-gray-900">{{ option.label }}</div>
-            <div class="text-sm text-gray-500">{{ option.description }}</div>
+            <div class="font-medium text-gray-900 text-sm sm:text-base">{{ option.label }}</div>
+            <div class="text-xs sm:text-sm text-gray-500 mt-1">{{ option.description }}</div>
           </div>
-          <div 
-            v-if="form.buydownType === option.value"
-            class="flex-shrink-0 text-primary-600"
-          >
+          <div v-if="form.buydownType === option.value" class="flex-shrink-0 text-primary-600">
             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
             </svg>
           </div>
         </label>
@@ -178,11 +183,15 @@
 
     <!-- Additional Principal Payment -->
     <div class="form-group">
-      <label for="additionalPrincipalPayment" class="form-label">Additional Principal Payment</label>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <label for="additionalPrincipalPayment" class="form-label"
+        >Additional Principal Payment</label
+      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Payment Amount -->
         <div class="relative">
-          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">$</span>
+          <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium"
+            >$</span
+          >
           <input
             id="additionalPrincipalPayment"
             v-model.number="form.additionalPrincipalPayment"
@@ -193,7 +202,7 @@
             placeholder="0"
           />
         </div>
-        
+
         <!-- Payment Frequency -->
         <div>
           <select
@@ -211,11 +220,13 @@
           </select>
         </div>
       </div>
-      
-      <div class="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+
+      <div class="mt-2 grid grid-cols-1 gap-3 text-xs sm:text-sm">
         <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
           <div class="text-blue-800 font-medium">💡 Impact</div>
-          <div class="text-blue-600 text-xs">Extra payments reduce loan term and total interest</div>
+          <div class="text-blue-600 text-xs">
+            Extra payments reduce loan term and total interest
+          </div>
         </div>
         <div class="bg-green-50 border border-green-200 rounded-lg p-3">
           <div class="text-green-800 font-medium">📅 Frequency</div>
@@ -229,22 +240,43 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="pt-6">
+    <div class="pt-4 sm:pt-6">
       <button
         type="submit"
         :disabled="loading || !isFormValid"
-        class="w-full btn-primary text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] transition-transform duration-200"
+        class="w-full btn-primary text-base sm:text-lg py-3 sm:py-4 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] transition-transform duration-200"
       >
         <span v-if="loading" class="flex items-center justify-center">
-          <svg class="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <svg
+            class="animate-spin -ml-1 mr-3 h-6 w-6 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
           Calculating...
         </span>
         <span v-else class="flex items-center justify-center">
-          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+            />
           </svg>
           Calculate Mortgage
         </span>
@@ -255,7 +287,13 @@
 
 <script setup lang="ts">
 import { reactive, computed, watch } from 'vue'
-import { MortgageType, PaymentFrequency, BuydownType, AdditionalPaymentFrequency, type MortgageInput } from '@/types/mortgage'
+import {
+  MortgageType,
+  PaymentFrequency,
+  BuydownType,
+  AdditionalPaymentFrequency,
+  type MortgageInput,
+} from '@/types/mortgage'
 
 interface Props {
   loading?: boolean
@@ -263,7 +301,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false
+  loading: false,
 })
 
 const emit = defineEmits<{
@@ -283,109 +321,118 @@ const form = reactive({
   paymentFrequency: props.initialValues?.paymentFrequency ?? PaymentFrequency.MONTHLY,
   buydownType: props.initialValues?.buydownType ?? BuydownType.NONE,
   additionalPrincipalPayment: props.initialValues?.additionalPrincipalPayment ?? 0,
-  additionalPaymentFrequency: props.initialValues?.additionalPaymentFrequency ?? AdditionalPaymentFrequency.MONTHLY
+  additionalPaymentFrequency:
+    props.initialValues?.additionalPaymentFrequency ?? AdditionalPaymentFrequency.MONTHLY,
 })
 
 // Watch for changes in initial values and update form
-watch(() => props.initialValues, (newValues) => {
-  if (newValues) {
-    isUpdatingFromParent = true
-    Object.assign(form, {
-      propertyValue: newValues.propertyValue,
-      downPayment: newValues.downPayment,
-      interestRate: newValues.interestRate,
-      loanTermYears: newValues.loanTermYears,
-      mortgageType: newValues.mortgageType,
-      paymentFrequency: newValues.paymentFrequency,
-      buydownType: newValues.buydownType,
-      additionalPrincipalPayment: newValues.additionalPrincipalPayment,
-      additionalPaymentFrequency: newValues.additionalPaymentFrequency
-    })
-    isUpdatingFromParent = false
-  }
-}, { deep: true })
+watch(
+  () => props.initialValues,
+  (newValues) => {
+    if (newValues) {
+      isUpdatingFromParent = true
+      Object.assign(form, {
+        propertyValue: newValues.propertyValue,
+        downPayment: newValues.downPayment,
+        interestRate: newValues.interestRate,
+        loanTermYears: newValues.loanTermYears,
+        mortgageType: newValues.mortgageType,
+        paymentFrequency: newValues.paymentFrequency,
+        buydownType: newValues.buydownType,
+        additionalPrincipalPayment: newValues.additionalPrincipalPayment,
+        additionalPaymentFrequency: newValues.additionalPaymentFrequency,
+      })
+      isUpdatingFromParent = false
+    }
+  },
+  { deep: true },
+)
 
 // Debounced update function
 let updateTimeout: number | null = null
 let lastEmittedInput: MortgageInput | null = null
 
 // Watch for form changes and emit updates with debouncing
-watch([
-  () => form.propertyValue,
-  () => form.downPayment, 
-  () => form.interestRate,
-  () => form.loanTermYears,
-  () => form.mortgageType,
-  () => form.paymentFrequency,
-  () => form.buydownType,
-  () => form.additionalPrincipalPayment,
-  () => form.additionalPaymentFrequency
-], () => {
-  // Don't emit updates when updating from parent to prevent reactivity loops
-  if (isUpdatingFromParent) return
-  
-  if (updateTimeout) {
-    clearTimeout(updateTimeout)
-  }
-  
-  updateTimeout = window.setTimeout(() => {
-    if (isFormValid.value) {
-      const input: MortgageInput = {
-        loanAmount: loanAmount.value,
-        interestRate: form.interestRate,
-        loanTermYears: form.loanTermYears,
-        downPayment: form.downPayment,
-        propertyValue: form.propertyValue,
-        mortgageType: form.mortgageType,
-        paymentFrequency: form.paymentFrequency,
-        buydownType: form.buydownType,
-        additionalPrincipalPayment: form.additionalPrincipalPayment,
-        additionalPaymentFrequency: form.additionalPaymentFrequency
-      }
-      
-      // Only emit if the input has actually changed
-      if (!lastEmittedInput || JSON.stringify(lastEmittedInput) !== JSON.stringify(input)) {
-        lastEmittedInput = input
-        emit('update', input)
-      }
+watch(
+  [
+    () => form.propertyValue,
+    () => form.downPayment,
+    () => form.interestRate,
+    () => form.loanTermYears,
+    () => form.mortgageType,
+    () => form.paymentFrequency,
+    () => form.buydownType,
+    () => form.additionalPrincipalPayment,
+    () => form.additionalPaymentFrequency,
+  ],
+  () => {
+    // Don't emit updates when updating from parent to prevent reactivity loops
+    if (isUpdatingFromParent) return
+
+    if (updateTimeout) {
+      clearTimeout(updateTimeout)
     }
-  }, 500) // 500ms debounce
-}, { flush: 'post' })
+
+    updateTimeout = window.setTimeout(() => {
+      if (isFormValid.value) {
+        const input: MortgageInput = {
+          loanAmount: loanAmount.value,
+          interestRate: form.interestRate,
+          loanTermYears: form.loanTermYears,
+          downPayment: form.downPayment,
+          propertyValue: form.propertyValue,
+          mortgageType: form.mortgageType,
+          paymentFrequency: form.paymentFrequency,
+          buydownType: form.buydownType,
+          additionalPrincipalPayment: form.additionalPrincipalPayment,
+          additionalPaymentFrequency: form.additionalPaymentFrequency,
+        }
+
+        // Only emit if the input has actually changed
+        if (!lastEmittedInput || JSON.stringify(lastEmittedInput) !== JSON.stringify(input)) {
+          lastEmittedInput = input
+          emit('update', input)
+        }
+      }
+    }, 500) // 500ms debounce
+  },
+  { flush: 'post' },
+)
 
 const mortgageTypes = [
   {
     value: MortgageType.FIXED,
     label: 'Fixed Rate',
-    description: 'Interest rate stays the same'
+    description: 'Interest rate stays the same',
   },
   {
     value: MortgageType.VARIABLE,
     label: 'Variable Rate',
-    description: 'Interest rate can change'
+    description: 'Interest rate can change',
   },
   {
     value: MortgageType.INTEREST_ONLY,
     label: 'Interest Only',
-    description: 'Pay only interest initially'
-  }
+    description: 'Pay only interest initially',
+  },
 ]
 
 const buydownOptions = [
   {
     value: BuydownType.NONE,
     label: 'No Buydown',
-    description: 'Standard fixed rate for entire term'
+    description: 'Standard fixed rate for entire term',
   },
   {
     value: BuydownType.TWO_ONE,
     label: '2-1 Buydown',
-    description: '2% off year 1, 1% off year 2'
+    description: '2% off year 1, 1% off year 2',
   },
   {
     value: BuydownType.THREE_TWO_ONE,
     label: '3-2-1 Buydown',
-    description: '3% off year 1, 2% off year 2, 1% off year 3'
-  }
+    description: '3% off year 1, 2% off year 2, 1% off year 3',
+  },
 ]
 
 const loanAmount = computed(() => {
@@ -398,9 +445,7 @@ const downPaymentPercentage = computed(() => {
 })
 
 const isFormValid = computed(() => {
-  return form.interestRate > 0 && 
-         form.loanTermYears > 0 && 
-         loanAmount.value > 0
+  return form.interestRate > 0 && form.loanTermYears > 0 && loanAmount.value > 0
 })
 
 const handleSubmit = () => {
@@ -415,7 +460,7 @@ const handleSubmit = () => {
     mortgageType: form.mortgageType,
     paymentFrequency: form.paymentFrequency,
     buydownType: form.buydownType,
-    additionalPrincipalPayment: form.additionalPrincipalPayment
+    additionalPrincipalPayment: form.additionalPrincipalPayment,
   }
 
   emit('submit', input)

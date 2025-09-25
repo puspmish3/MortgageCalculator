@@ -7,13 +7,10 @@ import java.util.List;
 
 @Schema(description = "Summary of mortgage comparison results")
 public record ComparisonSummaryDto(
-        
-        @Schema(description = "Best (lowest) monthly payment among all options", example = "3200.50")
-        BigDecimal bestMonthlyPayment,
 
-        @Schema(description = "Best (lowest) total interest among all options", example = "200000.00")
-        BigDecimal bestTotalInterest,
+        @Schema(description = "Best (lowest) monthly payment among all options", example = "3200.50") BigDecimal bestMonthlyPayment,
 
-        @Schema(description = "Detailed differences between mortgage options")
-        List<ComparisonDifferenceDto> differences
-) {}
+        @Schema(description = "Best (lowest) total interest among all options", example = "200000.00") BigDecimal bestTotalInterest,
+
+        @Schema(description = "Detailed differences between mortgage options") List<ComparisonDifferenceDto> differences) {
+}

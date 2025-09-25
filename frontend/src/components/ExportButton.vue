@@ -29,11 +29,14 @@
                 @click="exportPdf"
                 :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'group flex items-center px-4 py-2 text-sm w-full text-left'
+                  'group flex items-center px-4 py-2 text-sm w-full text-left',
                 ]"
                 :disabled="isExporting"
               >
-                <DocumentIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                <DocumentIcon
+                  class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                  aria-hidden="true"
+                />
                 Export as PDF
               </button>
             </MenuItem>
@@ -42,11 +45,14 @@
                 @click="exportExcel"
                 :class="[
                   active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'group flex items-center px-4 py-2 text-sm w-full text-left'
+                  'group flex items-center px-4 py-2 text-sm w-full text-left',
                 ]"
                 :disabled="isExporting"
               >
-                <TableCellsIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                <TableCellsIcon
+                  class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                  aria-hidden="true"
+                />
                 Export as Excel
               </button>
             </MenuItem>
@@ -58,61 +64,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
-import { 
-  ArrowDownTrayIcon, 
+import { ref } from 'vue'
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import {
+  ArrowDownTrayIcon,
   ChevronDownIcon,
   DocumentIcon,
-  TableCellsIcon
-} from '@heroicons/vue/24/outline';
-import { ExportService } from '@/services/exportService';
-import type { MortgageCalculation, MortgageComparison } from '@/types/mortgage';
+  TableCellsIcon,
+} from '@heroicons/vue/24/outline'
+import { ExportService } from '@/services/exportService'
+import type { MortgageCalculation, MortgageComparison } from '@/types/mortgage'
 
 interface Props {
-  data: MortgageCalculation | MortgageComparison;
-  type: 'mortgage' | 'comparison';
+  data: MortgageCalculation | MortgageComparison
+  type: 'mortgage' | 'comparison'
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const isExporting = ref(false);
+const isExporting = ref(false)
 
 const exportPdf = async () => {
-  if (isExporting.value) return;
-  
+  if (isExporting.value) return
+
   try {
-    isExporting.value = true;
-    
+    isExporting.value = true
+
     if (props.type === 'mortgage') {
-      await ExportService.exportMortgagePdf(props.data as MortgageCalculation);
+      await ExportService.exportMortgagePdf(props.data as MortgageCalculation)
     } else {
-      await ExportService.exportComparisonPdf(props.data as MortgageComparison);
+      await ExportService.exportComparisonPdf(props.data as MortgageComparison)
     }
   } catch (error) {
-    console.error('Export failed:', error);
+    console.error('Export failed:', error)
     // You might want to show a toast notification here
   } finally {
-    isExporting.value = false;
+    isExporting.value = false
   }
-};
+}
 
 const exportExcel = async () => {
-  if (isExporting.value) return;
-  
+  if (isExporting.value) return
+
   try {
-    isExporting.value = true;
-    
+    isExporting.value = true
+
     if (props.type === 'mortgage') {
-      await ExportService.exportMortgageExcel(props.data as MortgageCalculation);
+      await ExportService.exportMortgageExcel(props.data as MortgageCalculation)
     } else {
-      await ExportService.exportComparisonExcel(props.data as MortgageComparison);
+      await ExportService.exportComparisonExcel(props.data as MortgageComparison)
     }
   } catch (error) {
-    console.error('Export failed:', error);
+    console.error('Export failed:', error)
     // You might want to show a toast notification here
   } finally {
-    isExporting.value = false;
+    isExporting.value = false
   }
-};
+}
 </script>

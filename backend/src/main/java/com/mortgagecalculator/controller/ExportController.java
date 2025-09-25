@@ -41,9 +41,8 @@ public class ExportController {
     @Operation(summary = "Export mortgage calculation as PDF")
     @PostMapping("/mortgage/pdf")
     public ResponseEntity<ByteArrayResource> exportMortgagePdf(
-            @Parameter(description = "Mortgage calculation data")
-            @RequestBody MortgageCalculationDto calculation) {
-        
+            @Parameter(description = "Mortgage calculation data") @RequestBody MortgageCalculationDto calculation) {
+
         logger.info("Exporting mortgage calculation to PDF: {}", calculation.calculationId());
 
         try {
@@ -67,9 +66,8 @@ public class ExportController {
     @Operation(summary = "Export mortgage calculation as Excel")
     @PostMapping("/mortgage/excel")
     public ResponseEntity<ByteArrayResource> exportMortgageExcel(
-            @Parameter(description = "Mortgage calculation data")
-            @RequestBody MortgageCalculationDto calculation) {
-        
+            @Parameter(description = "Mortgage calculation data") @RequestBody MortgageCalculationDto calculation) {
+
         logger.info("Exporting mortgage calculation to Excel: {}", calculation.calculationId());
 
         try {
@@ -80,7 +78,8 @@ public class ExportController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .contentType(MediaType
+                            .parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .contentLength(excelContent.length)
                     .body(resource);
 
@@ -93,9 +92,8 @@ public class ExportController {
     @Operation(summary = "Export mortgage comparison as PDF")
     @PostMapping("/comparison/pdf")
     public ResponseEntity<ByteArrayResource> exportComparisonPdf(
-            @Parameter(description = "Mortgage comparison data")
-            @RequestBody MortgageComparisonDto comparison) {
-        
+            @Parameter(description = "Mortgage comparison data") @RequestBody MortgageComparisonDto comparison) {
+
         logger.info("Exporting mortgage comparison to PDF: {}", comparison.comparisonId());
 
         try {
@@ -119,9 +117,8 @@ public class ExportController {
     @Operation(summary = "Export mortgage comparison as Excel")
     @PostMapping("/comparison/excel")
     public ResponseEntity<ByteArrayResource> exportComparisonExcel(
-            @Parameter(description = "Mortgage comparison data")
-            @RequestBody MortgageComparisonDto comparison) {
-        
+            @Parameter(description = "Mortgage comparison data") @RequestBody MortgageComparisonDto comparison) {
+
         logger.info("Exporting mortgage comparison to Excel: {}", comparison.comparisonId());
 
         try {
@@ -132,7 +129,8 @@ public class ExportController {
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-                    .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .contentType(MediaType
+                            .parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                     .contentLength(excelContent.length)
                     .body(resource);
 
@@ -145,9 +143,8 @@ public class ExportController {
     @Operation(summary = "Get mortgage calculation by ID for export")
     @GetMapping("/mortgage/{calculationId}")
     public ResponseEntity<MortgageCalculationDto> getMortgageForExport(
-            @Parameter(description = "Calculation ID")
-            @PathVariable String calculationId) {
-        
+            @Parameter(description = "Calculation ID") @PathVariable String calculationId) {
+
         logger.info("Retrieving mortgage calculation for export: {}", calculationId);
 
         try {
@@ -163,9 +160,8 @@ public class ExportController {
     @Operation(summary = "Get mortgage comparison by ID for export")
     @GetMapping("/comparison/{comparisonId}")
     public ResponseEntity<MortgageComparisonDto> getComparisonForExport(
-            @Parameter(description = "Comparison ID")
-            @PathVariable String comparisonId) {
-        
+            @Parameter(description = "Comparison ID") @PathVariable String comparisonId) {
+
         logger.info("Retrieving mortgage comparison for export: {}", comparisonId);
 
         try {

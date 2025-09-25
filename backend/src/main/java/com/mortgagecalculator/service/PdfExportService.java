@@ -97,8 +97,8 @@ public class PdfExportService {
             // Add complete amortization schedules for all options
             for (int i = 0; i < comparison.mortgages().size(); i++) {
                 document.add(new AreaBreak());
-                addCompleteAmortizationTable(document, comparison.mortgages().get(i).amortizationSchedule(), 
-                                           "Option " + (i + 1) + " - Complete Amortization Schedule");
+                addCompleteAmortizationTable(document, comparison.mortgages().get(i).amortizationSchedule(),
+                        "Option " + (i + 1) + " - Complete Amortization Schedule");
             }
 
             // Add recommendations section
@@ -169,7 +169,7 @@ public class PdfExportService {
         document.add(sectionHeader);
 
         // Summary table with alternating row colors
-        Table summaryTable = new Table(UnitValue.createPercentArray(new float[]{2, 3}))
+        Table summaryTable = new Table(UnitValue.createPercentArray(new float[] { 2, 3 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(20)
                 .setBorder(new SolidBorder(new DeviceRgb(189, 195, 199), 1));
@@ -177,10 +177,15 @@ public class PdfExportService {
         addColoredSummaryRow(summaryTable, "Loan Amount:", formatCurrency(calculation.summary().loanAmount()), true);
         addColoredSummaryRow(summaryTable, "Interest Rate:", calculation.summary().interestRate() + "%", false);
         addColoredSummaryRow(summaryTable, "Loan Term:", calculation.summary().loanTermYears() + " years", true);
-        addColoredSummaryRow(summaryTable, "Payment Frequency:", calculation.summary().paymentFrequency().getDisplayName(), false);
-        addColoredSummaryRow(summaryTable, "Monthly Payment:", formatCurrency(calculation.monthlyPayment()), true, new DeviceRgb(155, 89, 182)); // Purple highlight for important values
-        addColoredSummaryRow(summaryTable, "Total Interest:", formatCurrency(calculation.totalInterest()), false, new DeviceRgb(231, 76, 60)); // Red for interest
-        addColoredSummaryRow(summaryTable, "Total Amount Paid:", formatCurrency(calculation.summary().totalAmountPaid()), true, new DeviceRgb(52, 152, 219)); // Blue for totals
+        addColoredSummaryRow(summaryTable, "Payment Frequency:",
+                calculation.summary().paymentFrequency().getDisplayName(), false);
+        addColoredSummaryRow(summaryTable, "Monthly Payment:", formatCurrency(calculation.monthlyPayment()), true,
+                new DeviceRgb(155, 89, 182)); // Purple highlight for important values
+        addColoredSummaryRow(summaryTable, "Total Interest:", formatCurrency(calculation.totalInterest()), false,
+                new DeviceRgb(231, 76, 60)); // Red for interest
+        addColoredSummaryRow(summaryTable, "Total Amount Paid:",
+                formatCurrency(calculation.summary().totalAmountPaid()), true, new DeviceRgb(52, 152, 219)); // Blue for
+                                                                                                             // totals
         addColoredSummaryRow(summaryTable, "Total Payments:", String.valueOf(calculation.totalPayments()), false);
 
         document.add(summaryTable);
@@ -195,21 +200,21 @@ public class PdfExportService {
         document.add(sectionHeader);
 
         // Best options summary
-        Table bestOptionsTable = new Table(UnitValue.createPercentArray(new float[]{2, 3}))
+        Table bestOptionsTable = new Table(UnitValue.createPercentArray(new float[] { 2, 3 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(20);
 
-        addSummaryRow(bestOptionsTable, "Best Monthly Payment:", 
-                     formatCurrency(comparison.comparisonSummary().bestMonthlyPayment()));
-        addSummaryRow(bestOptionsTable, "Lowest Total Interest:", 
-                     formatCurrency(comparison.comparisonSummary().bestTotalInterest()));
+        addSummaryRow(bestOptionsTable, "Best Monthly Payment:",
+                formatCurrency(comparison.comparisonSummary().bestMonthlyPayment()));
+        addSummaryRow(bestOptionsTable, "Lowest Total Interest:",
+                formatCurrency(comparison.comparisonSummary().bestTotalInterest()));
 
         document.add(bestOptionsTable);
 
         // Comparison table
         if (comparison.mortgages().size() >= 2) {
             Table comparisonTable = new Table(UnitValue.createPercentArray(
-                    new float[]{2, 1.5f, 1.5f, 1.5f, 1.5f}))
+                    new float[] { 2, 1.5f, 1.5f, 1.5f, 1.5f }))
                     .setWidth(UnitValue.createPercentValue(100))
                     .setMarginBottom(20);
 
@@ -246,7 +251,7 @@ public class PdfExportService {
         document.add(sectionHeader);
 
         // Create table with appropriate columns
-        Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 1.5f, 1.5f, 1.5f, 2}))
+        Table table = new Table(UnitValue.createPercentArray(new float[] { 1, 2, 1.5f, 1.5f, 1.5f, 2 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setFontSize(9);
 
@@ -262,7 +267,7 @@ public class PdfExportService {
         int maxRows = Math.min(schedule.size(), 120);
         for (int i = 0; i < maxRows; i++) {
             AmortizationEntryDto entry = schedule.get(i);
-            
+
             table.addCell(new Cell().add(new Paragraph(String.valueOf(entry.paymentNumber()))));
             table.addCell(new Cell().add(new Paragraph(entry.paymentDate().format(DATE_FORMATTER))));
             table.addCell(new Cell().add(new Paragraph(formatCurrency(entry.principalPayment()))));
@@ -275,7 +280,8 @@ public class PdfExportService {
 
         // Add note if schedule was truncated
         if (schedule.size() > maxRows) {
-            Paragraph note = new Paragraph("Note: Showing first " + maxRows + " payments of " + schedule.size() + " total payments.")
+            Paragraph note = new Paragraph(
+                    "Note: Showing first " + maxRows + " payments of " + schedule.size() + " total payments.")
                     .setFontSize(10)
                     .setItalic()
                     .setMarginTop(10);
@@ -292,31 +298,29 @@ public class PdfExportService {
         addColoredSummaryRow(table, label, value, alternateRow, null);
     }
 
-    private void addColoredSummaryRow(Table table, String label, String value, boolean alternateRow, DeviceRgb highlightColor) {
-        DeviceRgb backgroundColor = alternateRow ? 
-            new DeviceRgb(247, 249, 250) : // Light gray for alternate rows
-            new DeviceRgb(255, 255, 255); // White
-        
+    private void addColoredSummaryRow(Table table, String label, String value, boolean alternateRow,
+            DeviceRgb highlightColor) {
+        DeviceRgb backgroundColor = alternateRow ? new DeviceRgb(247, 249, 250) : // Light gray for alternate rows
+                new DeviceRgb(255, 255, 255); // White
+
         Color textColor = highlightColor != null ? ColorConstants.WHITE : ColorConstants.BLACK;
         Color cellColor = highlightColor != null ? highlightColor : backgroundColor;
-        
+
         Cell labelCell = new Cell()
-            .add(new Paragraph(label).setBold().setFontColor(textColor))
-            .setBackgroundColor(cellColor)
-            .setPadding(8)
-            .setBorder(new SolidBorder(new DeviceRgb(189, 195, 199), 0.5f));
-            
+                .add(new Paragraph(label).setBold().setFontColor(textColor))
+                .setBackgroundColor(cellColor)
+                .setPadding(8)
+                .setBorder(new SolidBorder(new DeviceRgb(189, 195, 199), 0.5f));
+
         Cell valueCell = new Cell()
-            .add(new Paragraph(value).setFontColor(textColor))
-            .setBackgroundColor(cellColor)
-            .setPadding(8)
-            .setBorder(new SolidBorder(new DeviceRgb(189, 195, 199), 0.5f));
-            
+                .add(new Paragraph(value).setFontColor(textColor))
+                .setBackgroundColor(cellColor)
+                .setPadding(8)
+                .setBorder(new SolidBorder(new DeviceRgb(189, 195, 199), 0.5f));
+
         table.addCell(labelCell);
         table.addCell(valueCell);
     }
-
-
 
     private void addBarChart(Document document, String title, MortgageComparisonDto comparison, String metric) {
         // Chart title
@@ -329,16 +333,16 @@ public class PdfExportService {
         document.add(chartTitle);
 
         // Create visual bar chart using tables
-        Table chartTable = new Table(UnitValue.createPercentArray(new float[]{2, 8}))
+        Table chartTable = new Table(UnitValue.createPercentArray(new float[] { 2, 8 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(30);
 
         // Colors for different options
         DeviceRgb[] colors = {
-            new DeviceRgb(52, 152, 219),  // Blue
-            new DeviceRgb(46, 204, 113),  // Green
-            new DeviceRgb(155, 89, 182),  // Purple
-            new DeviceRgb(231, 76, 60),   // Red
+                new DeviceRgb(52, 152, 219), // Blue
+                new DeviceRgb(46, 204, 113), // Green
+                new DeviceRgb(155, 89, 182), // Purple
+                new DeviceRgb(231, 76, 60), // Red
         };
 
         // Calculate max value for scaling
@@ -347,44 +351,45 @@ public class PdfExportService {
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             MortgageCalculationDto mortgage = comparison.mortgages().get(i);
             double value = getValueForMetric(mortgage, metric);
-            
+
             // Option label
             Cell labelCell = new Cell()
                     .add(new Paragraph("Option " + (i + 1)).setBold())
                     .setBackgroundColor(new DeviceRgb(236, 240, 241))
                     .setPadding(8)
                     .setTextAlignment(TextAlignment.CENTER);
-            
+
             // Bar representation
             double barWidth = (value / maxValue) * 80; // Scale to 80% max width
             String barValue = formatValueForMetric(value, metric);
-            
+
             Cell barCell = new Cell()
                     .setPadding(4);
-                    
+
             // Create visual bar using nested table
-            Table barTable = new Table(UnitValue.createPercentArray(new float[]{(float)barWidth, (float)(100-barWidth)}))
+            Table barTable = new Table(
+                    UnitValue.createPercentArray(new float[] { (float) barWidth, (float) (100 - barWidth) }))
                     .setWidth(UnitValue.createPercentValue(100));
-                    
+
             Cell colorBar = new Cell()
                     .setBackgroundColor(colors[i % colors.length])
                     .setPadding(6)
                     .add(new Paragraph(barValue)
-                        .setFontColor(ColorConstants.WHITE)
-                        .setBold()
-                        .setTextAlignment(TextAlignment.CENTER));
-                        
+                            .setFontColor(ColorConstants.WHITE)
+                            .setBold()
+                            .setTextAlignment(TextAlignment.CENTER));
+
             Cell emptySpace = new Cell()
                     .setBackgroundColor(new DeviceRgb(245, 245, 245))
                     .setPadding(6);
-                    
+
             barTable.addCell(colorBar);
             if (barWidth < 100) {
                 barTable.addCell(emptySpace);
             }
-            
+
             barCell.add(barTable);
-            
+
             chartTable.addCell(labelCell);
             chartTable.addCell(barCell);
         }
@@ -422,8 +427,9 @@ public class PdfExportService {
                 .setStrokeColor(new DeviceRgb(189, 195, 199))
                 .setMarginTop(20);
         document.add(separator);
-        
-        Paragraph footer = new Paragraph("Generated by Mortgage Calculator Application | Professional Financial Analysis")
+
+        Paragraph footer = new Paragraph(
+                "Generated by Mortgage Calculator Application | Professional Financial Analysis")
                 .setFontSize(10)
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFontColor(new DeviceRgb(127, 140, 141))
@@ -444,7 +450,8 @@ public class PdfExportService {
                 .setMarginBottom(20);
 
         summary.add("This report compares " + comparison.mortgages().size() + " mortgage options. ");
-        summary.add("The analysis includes monthly payment comparisons, total cost analysis, and detailed amortization schedules for each option. ");
+        summary.add(
+                "The analysis includes monthly payment comparisons, total cost analysis, and detailed amortization schedules for each option. ");
         summary.add("Key recommendations are provided based on different financial scenarios and priorities.");
 
         document.add(summary);
@@ -453,7 +460,7 @@ public class PdfExportService {
     private void addComprehensiveComparisonSummary(Document document, MortgageComparisonDto comparison) {
         // Reset row counter for this table
         comparisonRowCounter = 0;
-        
+
         // Enhanced Comprehensive Comparison Summary Header
         Paragraph sectionHeader = new Paragraph("📋 Detailed Comparison Summary")
                 .setFontSize(18)
@@ -472,7 +479,7 @@ public class PdfExportService {
         for (int i = 1; i <= numOptions; i++) {
             columnWidths[i] = 1.5f; // Option columns (equal width)
         }
-        
+
         Table comparisonTable = new Table(UnitValue.createPercentArray(columnWidths))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(20);
@@ -484,7 +491,7 @@ public class PdfExportService {
                 .setPadding(10)
                 .setTextAlignment(TextAlignment.CENTER);
         comparisonTable.addHeaderCell(metricHeaderCell);
-        
+
         for (int i = 0; i < comparison.mortgages().size(); i++) {
             Cell optionHeaderCell = new Cell()
                     .add(new Paragraph("Option " + (i + 1)).setBold().setFontColor(ColorConstants.WHITE))
@@ -495,20 +502,20 @@ public class PdfExportService {
         }
 
         // Add rows for all key metrics
-        addComparisonRow(comparisonTable, "Loan Amount", comparison.mortgages(), 
-                        m -> formatCurrency(m.summary().loanAmount()));
-        addComparisonRow(comparisonTable, "Interest Rate", comparison.mortgages(), 
-                        m -> m.summary().interestRate() + "%");
-        addComparisonRow(comparisonTable, "Loan Term", comparison.mortgages(), 
-                        m -> m.summary().loanTermYears() + " years");
-        addComparisonRow(comparisonTable, "Monthly Payment", comparison.mortgages(), 
-                        m -> formatCurrency(m.monthlyPayment()));
-        addComparisonRow(comparisonTable, "Total Interest", comparison.mortgages(), 
-                        m -> formatCurrency(m.totalInterest()));
-        addComparisonRow(comparisonTable, "Total Amount Paid", comparison.mortgages(), 
-                        m -> formatCurrency(m.summary().totalAmountPaid()));
-        addComparisonRow(comparisonTable, "Total Payments", comparison.mortgages(), 
-                        m -> String.valueOf(m.totalPayments()));
+        addComparisonRow(comparisonTable, "Loan Amount", comparison.mortgages(),
+                m -> formatCurrency(m.summary().loanAmount()));
+        addComparisonRow(comparisonTable, "Interest Rate", comparison.mortgages(),
+                m -> m.summary().interestRate() + "%");
+        addComparisonRow(comparisonTable, "Loan Term", comparison.mortgages(),
+                m -> m.summary().loanTermYears() + " years");
+        addComparisonRow(comparisonTable, "Monthly Payment", comparison.mortgages(),
+                m -> formatCurrency(m.monthlyPayment()));
+        addComparisonRow(comparisonTable, "Total Interest", comparison.mortgages(),
+                m -> formatCurrency(m.totalInterest()));
+        addComparisonRow(comparisonTable, "Total Amount Paid", comparison.mortgages(),
+                m -> formatCurrency(m.summary().totalAmountPaid()));
+        addComparisonRow(comparisonTable, "Total Payments", comparison.mortgages(),
+                m -> String.valueOf(m.totalPayments()));
 
         document.add(comparisonTable);
     }
@@ -527,10 +534,10 @@ public class PdfExportService {
 
         // Monthly Payment Comparison Chart (Bar Chart representation)
         addBarChart(document, "Monthly Payment Comparison", comparison, "monthlyPayment");
-        
+
         // Total Cost Comparison Chart
         addBarChart(document, "Total Cost Comparison", comparison, "totalCost");
-        
+
         // Interest Comparison Chart
         addBarChart(document, "Total Interest Comparison", comparison, "totalInterest");
 
@@ -543,7 +550,7 @@ public class PdfExportService {
                 .setFontColor(new DeviceRgb(52, 73, 94));
         document.add(breakdownTitle);
 
-        Table costBreakdownTable = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2}))
+        Table costBreakdownTable = new Table(UnitValue.createPercentArray(new float[] { 2, 2, 2 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(20);
 
@@ -569,8 +576,8 @@ public class PdfExportService {
         costBreakdownTable.addHeaderCell(interestHeader);
 
         DeviceRgb[] rowColors = {
-            new DeviceRgb(247, 249, 250), // Light gray
-            new DeviceRgb(255, 255, 255)  // White
+                new DeviceRgb(247, 249, 250), // Light gray
+                new DeviceRgb(255, 255, 255) // White
         };
 
         for (int i = 0; i < comparison.mortgages().size(); i++) {
@@ -589,7 +596,7 @@ public class PdfExportService {
                     .setTextAlignment(TextAlignment.RIGHT);
             Cell interestCell = new Cell()
                     .add(new Paragraph(formatCurrency(mortgage.totalInterest()))
-                        .setFontColor(new DeviceRgb(231, 76, 60))) // Red for interest
+                            .setFontColor(new DeviceRgb(231, 76, 60))) // Red for interest
                     .setBackgroundColor(rowColor)
                     .setPadding(8)
                     .setTextAlignment(TextAlignment.RIGHT);
@@ -606,7 +613,7 @@ public class PdfExportService {
                 .map(m -> m.summary().totalAmountPaid())
                 .min(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
-        
+
         BigDecimal highestTotalCost = comparison.mortgages().stream()
                 .map(m -> m.summary().totalAmountPaid())
                 .max(BigDecimal::compareTo)
@@ -614,14 +621,16 @@ public class PdfExportService {
 
         BigDecimal maxSavings = highestTotalCost.subtract(lowestTotalCost);
 
-        Paragraph savingsAnalysis = new Paragraph("Potential Savings: Choosing the most cost-effective option could save you " 
-                + formatCurrency(maxSavings) + " over the life of the loan.")
+        Paragraph savingsAnalysis = new Paragraph(
+                "Potential Savings: Choosing the most cost-effective option could save you "
+                        + formatCurrency(maxSavings) + " over the life of the loan.")
                 .setMarginBottom(20)
                 .setBold();
         document.add(savingsAnalysis);
     }
 
-    private void addDetailedMortgageSummary(Document document, MortgageCalculationDto calculation, String sectionTitle) {
+    private void addDetailedMortgageSummary(Document document, MortgageCalculationDto calculation,
+            String sectionTitle) {
         // Enhanced version of mortgage summary with more details
         Paragraph sectionHeader = new Paragraph(sectionTitle + " - Detailed Summary")
                 .setFontSize(18)
@@ -630,7 +639,7 @@ public class PdfExportService {
         document.add(sectionHeader);
 
         // Create detailed summary table
-        Table summaryTable = new Table(UnitValue.createPercentArray(new float[]{2, 3}))
+        Table summaryTable = new Table(UnitValue.createPercentArray(new float[] { 2, 3 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setMarginBottom(20);
 
@@ -658,7 +667,7 @@ public class PdfExportService {
         document.add(sectionHeader);
 
         // Create table with all columns including interest rate
-        Table table = new Table(UnitValue.createPercentArray(new float[]{0.8f, 1.8f, 1.2f, 1.2f, 1.2f, 1.5f, 1.0f}))
+        Table table = new Table(UnitValue.createPercentArray(new float[] { 0.8f, 1.8f, 1.2f, 1.2f, 1.2f, 1.5f, 1.0f }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setFontSize(8);
 
@@ -699,15 +708,14 @@ public class PdfExportService {
 
         // Add recommendations
         List<String> recommendations = List.of(
-                String.format("For lowest monthly payment: Choose Option %d with $%s/month", 
-                            bestMonthlyIndex + 1, 
-                            formatCurrency(comparison.mortgages().get(bestMonthlyIndex).monthlyPayment())),
-                String.format("For lowest total cost: Choose Option %d with total cost of $%s", 
-                            bestTotalCostIndex + 1, 
-                            formatCurrency(comparison.mortgages().get(bestTotalCostIndex).summary().totalAmountPaid())),
+                String.format("For lowest monthly payment: Choose Option %d with $%s/month",
+                        bestMonthlyIndex + 1,
+                        formatCurrency(comparison.mortgages().get(bestMonthlyIndex).monthlyPayment())),
+                String.format("For lowest total cost: Choose Option %d with total cost of $%s",
+                        bestTotalCostIndex + 1,
+                        formatCurrency(comparison.mortgages().get(bestTotalCostIndex).summary().totalAmountPaid())),
                 "Consider your cash flow needs and long-term financial goals when making your decision.",
-                "Consult with a financial advisor for personalized recommendations."
-        );
+                "Consult with a financial advisor for personalized recommendations.");
 
         for (String recommendation : recommendations) {
             Paragraph recParagraph = new Paragraph("• " + recommendation)
@@ -726,7 +734,7 @@ public class PdfExportService {
         document.add(yearBreakdownHeader);
 
         // Group payments by year and calculate totals
-        Table yearTable = new Table(UnitValue.createPercentArray(new float[]{1, 2, 2, 2}))
+        Table yearTable = new Table(UnitValue.createPercentArray(new float[] { 1, 2, 2, 2 }))
                 .setWidth(UnitValue.createPercentValue(100))
                 .setFontSize(10);
 
@@ -761,15 +769,15 @@ public class PdfExportService {
     }
 
     private int comparisonRowCounter = 0; // Instance variable for row counting
-    
-    private void addComparisonRow(Table table, String metric, List<MortgageCalculationDto> mortgages, 
-                                java.util.function.Function<MortgageCalculationDto, String> valueExtractor) {
+
+    private void addComparisonRow(Table table, String metric, List<MortgageCalculationDto> mortgages,
+            java.util.function.Function<MortgageCalculationDto, String> valueExtractor) {
         comparisonRowCounter++;
-        
-        DeviceRgb rowColor = (comparisonRowCounter % 2 == 0) ? 
-            new DeviceRgb(247, 249, 250) : // Light gray for even rows
-            new DeviceRgb(255, 255, 255);  // White for odd rows
-        
+
+        DeviceRgb rowColor = (comparisonRowCounter % 2 == 0) ? new DeviceRgb(247, 249, 250) : // Light gray for even
+                                                                                              // rows
+                new DeviceRgb(255, 255, 255); // White for odd rows
+
         // Metric column with enhanced styling
         Cell metricCell = new Cell()
                 .add(new Paragraph(metric).setBold())
@@ -777,13 +785,13 @@ public class PdfExportService {
                 .setPadding(8)
                 .setTextAlignment(TextAlignment.LEFT);
         table.addCell(metricCell);
-        
+
         // Value columns with proper alignment
         for (MortgageCalculationDto mortgage : mortgages) {
             String value = valueExtractor.apply(mortgage);
-            TextAlignment alignment = value.contains("$") || value.contains("%") ? 
-                TextAlignment.RIGHT : TextAlignment.CENTER;
-            
+            TextAlignment alignment = value.contains("$") || value.contains("%") ? TextAlignment.RIGHT
+                    : TextAlignment.CENTER;
+
             Cell valueCell = new Cell()
                     .add(new Paragraph(value))
                     .setBackgroundColor(rowColor)
@@ -796,28 +804,28 @@ public class PdfExportService {
     private int findBestMonthlyPaymentIndex(List<MortgageCalculationDto> mortgages) {
         BigDecimal bestPayment = mortgages.get(0).monthlyPayment();
         int bestIndex = 0;
-        
+
         for (int i = 1; i < mortgages.size(); i++) {
             if (mortgages.get(i).monthlyPayment().compareTo(bestPayment) < 0) {
                 bestPayment = mortgages.get(i).monthlyPayment();
                 bestIndex = i;
             }
         }
-        
+
         return bestIndex;
     }
 
     private int findBestTotalCostIndex(List<MortgageCalculationDto> mortgages) {
         BigDecimal bestCost = mortgages.get(0).summary().totalAmountPaid();
         int bestIndex = 0;
-        
+
         for (int i = 1; i < mortgages.size(); i++) {
             if (mortgages.get(i).summary().totalAmountPaid().compareTo(bestCost) < 0) {
                 bestCost = mortgages.get(i).summary().totalAmountPaid();
                 bestIndex = i;
             }
         }
-        
+
         return bestIndex;
     }
 

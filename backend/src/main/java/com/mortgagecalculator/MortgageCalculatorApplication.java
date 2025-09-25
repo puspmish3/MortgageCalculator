@@ -16,10 +16,29 @@ public class MortgageCalculatorApplication implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // Get allowed origins from environment or use defaults
+        String allowedOrigins = System.getenv("ALLOWED_ORIGINS");
+        String[] origins;
+
+        if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
+            origins = allowedOrigins.split(",");
+            System.out.println("Using CORS origins from environment: " + allowedOrigins);
+        } else {
+            // Default origins for local development and Azure
+            origins = new String[] {
+                    "http://localhost:5173",
+                    "http://localhost:3000",
+                    "http://localhost:8081",
+                    "https://frontend.grayisland-6acd1730.eastus2.azurecontainerapps.io",
+                    "*" // Temporary - allow all origins for testing
+            };
+            System.out.println("Using default CORS origins including wildcard");
+        }
+
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8081")
+                .allowedOrigins(origins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false); // Set to false for Azure Container Apps
     }
 }

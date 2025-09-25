@@ -1,11 +1,11 @@
 <template>
   <div class="space-y-4">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-semibold text-gray-900">Payment Breakdown Chart</h2>
+    <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+      <h2 class="text-lg sm:text-xl font-semibold text-gray-900">Payment Breakdown Chart</h2>
       <div class="flex items-center space-x-4">
-        <select 
-          v-model="chartType" 
-          class="text-sm border-gray-300 rounded-md focus:border-primary-500 focus:ring-primary-500"
+        <select
+          v-model="chartType"
+          class="text-sm border-gray-300 rounded-md focus:border-primary-500 focus:ring-primary-500 min-h-[44px] px-3 w-full sm:w-auto"
         >
           <option value="monthly">Monthly Breakdown</option>
           <option value="cumulative">Cumulative Total</option>
@@ -15,47 +15,47 @@
     </div>
 
     <!-- Chart Container -->
-    <div class="bg-white border border-gray-200 rounded-lg p-6">
-      <div style="height: 400px;">
+    <div class="bg-white border border-gray-200 rounded-lg p-3 sm:p-6">
+      <div class="h-64 sm:h-80 lg:h-96">
         <canvas ref="chartCanvas"></canvas>
       </div>
     </div>
 
     <!-- Chart Legend -->
-    <div class="flex flex-wrap justify-center gap-4 text-sm">
+    <div class="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
       <div v-if="chartType === 'monthly' || chartType === 'cumulative'" class="flex items-center">
-        <div class="w-4 h-4 bg-primary-600 rounded mr-2"></div>
+        <div class="w-3 h-3 sm:w-4 sm:h-4 bg-primary-600 rounded mr-2 flex-shrink-0"></div>
         <span>Principal</span>
       </div>
       <div v-if="chartType === 'monthly' || chartType === 'cumulative'" class="flex items-center">
-        <div class="w-4 h-4 bg-orange-500 rounded mr-2"></div>
+        <div class="w-3 h-3 sm:w-4 sm:h-4 bg-orange-500 rounded mr-2 flex-shrink-0"></div>
         <span>Interest</span>
       </div>
       <div v-if="chartType === 'balance'" class="flex items-center">
-        <div class="w-4 h-4 bg-red-500 rounded mr-2"></div>
+        <div class="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded mr-2 flex-shrink-0"></div>
         <span>Remaining Balance</span>
       </div>
     </div>
 
     <!-- Chart Summary -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-primary-50 border border-primary-200 rounded-lg p-4 text-center">
-        <div class="text-lg font-semibold text-primary-900">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+      <div class="bg-primary-50 border border-primary-200 rounded-lg p-3 sm:p-4 text-center">
+        <div class="text-base sm:text-lg font-semibold text-primary-900">
           ${{ totalPrincipal.toLocaleString(undefined, { minimumFractionDigits: 0 }) }}
         </div>
-        <div class="text-sm text-primary-600">Total Principal</div>
+        <div class="text-xs sm:text-sm text-primary-600">Total Principal</div>
       </div>
-      <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 text-center">
-        <div class="text-lg font-semibold text-orange-900">
+      <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4 text-center">
+        <div class="text-base sm:text-lg font-semibold text-orange-900">
           ${{ totalInterest.toLocaleString(undefined, { minimumFractionDigits: 0 }) }}
         </div>
-        <div class="text-sm text-orange-600">Total Interest</div>
+        <div class="text-xs sm:text-sm text-orange-600">Total Interest</div>
       </div>
-      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-        <div class="text-lg font-semibold text-gray-900">
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4 text-center">
+        <div class="text-base sm:text-lg font-semibold text-gray-900">
           {{ schedule.length }}
         </div>
-        <div class="text-sm text-gray-600">Total Payments</div>
+        <div class="text-xs sm:text-sm text-gray-600">Total Payments</div>
       </div>
     </div>
   </div>
@@ -73,7 +73,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  type ChartConfiguration
+  type ChartConfiguration,
 } from 'chart.js'
 import type { AmortizationEntry } from '@/types/mortgage'
 
@@ -86,7 +86,7 @@ Chart.register(
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 )
 
 interface Props {
@@ -110,7 +110,7 @@ const totalInterest = computed(() => {
 const chartData = computed(() => {
   const maxDataPoints = 360 // Show max 30 years of monthly data
   let dataPoints = props.schedule
-  
+
   // Sample data if there are too many points
   if (dataPoints.length > maxDataPoints) {
     const step = Math.ceil(dataPoints.length / maxDataPoints)
@@ -135,49 +135,49 @@ const chartData = computed(() => {
         datasets: [
           {
             label: 'Principal',
-            data: dataPoints.map(entry => entry.principalPayment),
+            data: dataPoints.map((entry) => entry.principalPayment),
             backgroundColor: 'rgb(59, 130, 246)',
             borderColor: 'rgb(59, 130, 246)',
-            stack: 'payment'
+            stack: 'payment',
           },
           {
             label: 'Interest',
-            data: dataPoints.map(entry => entry.interestPayment),
+            data: dataPoints.map((entry) => entry.interestPayment),
             backgroundColor: 'rgb(249, 115, 22)',
             borderColor: 'rgb(249, 115, 22)',
-            stack: 'payment'
-          }
-        ]
+            stack: 'payment',
+          },
+        ],
       }
 
     case 'cumulative':
       let cumulativePrincipal = 0
       let cumulativeInterest = 0
-      
+
       return {
         labels,
         datasets: [
           {
             label: 'Cumulative Principal',
-            data: dataPoints.map(entry => {
+            data: dataPoints.map((entry) => {
               cumulativePrincipal += entry.principalPayment
               return cumulativePrincipal
             }),
             backgroundColor: 'rgba(59, 130, 246, 0.7)',
             borderColor: 'rgb(59, 130, 246)',
-            fill: true
+            fill: true,
           },
           {
             label: 'Cumulative Interest',
-            data: dataPoints.map(entry => {
+            data: dataPoints.map((entry) => {
               cumulativeInterest += entry.interestPayment
               return cumulativeInterest
             }),
             backgroundColor: 'rgba(249, 115, 22, 0.7)',
             borderColor: 'rgb(249, 115, 22)',
-            fill: true
-          }
-        ]
+            fill: true,
+          },
+        ],
       }
 
     case 'balance':
@@ -186,14 +186,14 @@ const chartData = computed(() => {
         datasets: [
           {
             label: 'Remaining Balance',
-            data: dataPoints.map(entry => entry.remainingBalance),
+            data: dataPoints.map((entry) => entry.remainingBalance),
             backgroundColor: 'rgba(239, 68, 68, 0.1)',
             borderColor: 'rgb(239, 68, 68)',
             borderWidth: 2,
             fill: true,
-            tension: 0.4
-          }
-        ]
+            tension: 0.4,
+          },
+        ],
       }
 
     default:
@@ -210,40 +210,60 @@ const chartConfig = computed((): ChartConfiguration => {
       maintainAspectRatio: false,
       interaction: {
         intersect: false,
-        mode: 'index'
+        mode: 'index',
       },
       plugins: {
         legend: {
-          position: 'top'
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 15,
+            font: {
+              size: 12,
+            },
+          },
         },
         tooltip: {
           callbacks: {
             label: (context) => {
               const value = context.parsed.y
-              return `${context.dataset.label}: $${value.toLocaleString(undefined, { minimumFractionDigits: 2 })}`
-            }
-          }
-        }
+              return `${context.dataset.label}: $${value.toLocaleString(undefined, { minimumFractionDigits: 0 })}`
+            },
+          },
+          titleFont: {
+            size: 12,
+          },
+          bodyFont: {
+            size: 11,
+          },
+        },
       },
       scales: {
         x: {
           grid: {
-            display: false
+            display: false,
           },
           ticks: {
-            maxTicksLimit: 12
-          }
+            maxTicksLimit: window.innerWidth < 640 ? 6 : 12,
+            font: {
+              size: window.innerWidth < 640 ? 10 : 12,
+            },
+          },
         },
         y: {
           beginAtZero: true,
           ticks: {
-            callback: function(value) {
-              return '$' + Number(value).toLocaleString()
-            }
-          }
-        }
-      }
-    }
+            maxTicksLimit: window.innerWidth < 640 ? 5 : 8,
+            callback: function (value) {
+              return '$' + Number(value).toLocaleString(undefined, { minimumFractionDigits: 0 })
+            },
+            font: {
+              size: window.innerWidth < 640 ? 10 : 12,
+            },
+          },
+        },
+      },
+    },
   }
 
   if (chartType.value === 'monthly') {
@@ -285,11 +305,15 @@ onUnmounted(() => {
   }
 })
 
-watch([chartType, () => props.schedule], () => {
-  if (chartInstance) {
-    updateChart()
-  } else {
-    createChart()
-  }
-}, { deep: true })
+watch(
+  [chartType, () => props.schedule],
+  () => {
+    if (chartInstance) {
+      updateChart()
+    } else {
+      createChart()
+    }
+  },
+  { deep: true },
+)
 </script>

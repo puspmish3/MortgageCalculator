@@ -25,7 +25,11 @@
       <div class="metric-card bg-gradient-to-br from-green-50 to-green-100 border-green-200">
         <div class="metric-label text-green-700">Total Amount Paid</div>
         <div class="metric-value text-green-900">
-          ${{ calculation.summary.totalAmountPaid.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}
+          ${{
+            calculation.summary.totalAmountPaid.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })
+          }}
         </div>
       </div>
     </div>
@@ -36,44 +40,48 @@
         <h3 class="section-subheader mb-0">Loan Summary</h3>
         <ExportButton :data="calculation" type="mortgage" />
       </div>
-        <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Loan Amount</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              ${{ calculation.summary.loanAmount.toLocaleString() }}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Interest Rate</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              {{ calculation.summary.interestRate }}%
-            </dd>
-          </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Loan Term</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              {{ calculation.summary.loanTermYears }} years
-            </dd>
-          </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Payment Frequency</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              {{ formatPaymentFrequency(calculation.summary.paymentFrequency) }}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Total Amount Paid</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              ${{ calculation.summary.totalAmountPaid.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}
-            </dd>
-          </div>
-          <div>
-            <dt class="text-sm font-medium text-gray-500">Total Payments</dt>
-            <dd class="mt-1 text-sm text-gray-900 font-semibold">
-              {{ calculation.totalPayments }}
-            </dd>
-          </div>
-        </dl>
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Loan Amount</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            ${{ calculation.summary.loanAmount.toLocaleString() }}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Interest Rate</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            {{ calculation.summary.interestRate }}%
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Loan Term</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            {{ calculation.summary.loanTermYears }} years
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Payment Frequency</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            {{ formatPaymentFrequency(calculation.summary.paymentFrequency) }}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Total Amount Paid</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            ${{
+              calculation.summary.totalAmountPaid.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+              })
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Total Payments</dt>
+          <dd class="mt-1 text-sm text-gray-900 font-semibold">
+            {{ calculation.totalPayments }}
+          </dd>
+        </div>
+      </dl>
     </div>
 
     <!-- Interest vs Principal Breakdown -->
@@ -84,8 +92,8 @@
           <span class="text-sm text-gray-600">Principal</span>
           <div class="flex items-center">
             <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
-              <div 
-                class="bg-primary-600 h-2 rounded-full" 
+              <div
+                class="bg-primary-600 h-2 rounded-full"
                 :style="{ width: principalPercentage + '%' }"
               ></div>
             </div>
@@ -98,8 +106,8 @@
           <span class="text-sm text-gray-600">Interest</span>
           <div class="flex items-center">
             <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
-              <div 
-                class="bg-orange-500 h-2 rounded-full" 
+              <div
+                class="bg-orange-500 h-2 rounded-full"
                 :style="{ width: interestPercentage + '%' }"
               ></div>
             </div>
@@ -119,18 +127,28 @@
         type="button"
       >
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
         Export PDF
       </button>
-      
+
       <button
         @click="$emit('exportExcel')"
         class="flex-1 btn-secondary flex items-center justify-center"
         type="button"
       >
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
         Export Excel
       </button>

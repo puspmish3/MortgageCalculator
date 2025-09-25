@@ -22,18 +22,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> errors = new HashMap<>();
-        
+
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        
+
         response.put("status", "error");
         response.put("message", "Validation failed");
         response.put("errors", errors);
         response.put("timestamp", Instant.now().toString());
-        
+
         logger.warn("Validation failed: {}", errors);
         return ResponseEntity.badRequest().body(response);
     }
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
         response.put("status", "error");
         response.put("message", ex.getMessage());
         response.put("timestamp", Instant.now().toString());
-        
+
         logger.warn("Illegal argument: {}", ex.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
         response.put("status", "error");
         response.put("message", "An unexpected error occurred");
         response.put("timestamp", Instant.now().toString());
-        
+
         logger.error("Unexpected error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
